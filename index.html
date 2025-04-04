@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+  <style>
+    body {
+      font-family: 'Prompt', sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    .container {
+      max-width: 900px;
+      margin-top: 30px;
+      margin-bottom: 50px;
+    }
+
+    /* ✅ ใช้ร่วมกันทั้ง Banner และ Card */
+    .box-style {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .banner-img {
+  aspect-ratio: 7 / 2; /* หรือ 3.5 / 1 */
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+
+    .card-custom {
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      padding: 15px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card-custom:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    .icon-img {
+      width: 50px;
+      height: 50px;
+      margin-right: 15px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .menu-text {
+      font-size: 16px;
+      font-weight: 500;
+      word-wrap: break-word;
+    }
+
+    .card-wrapper {
+      margin-top: 20px;
+    }
+
+    .dashboard-title {
+  font-size: 1.0rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.6;
+}
+
+.text-purple {
+  color: #92278f; /* Bootstrap purple หรือปรับเป็นเฉดอื่นได้ */
+}
+
+.dashboard-footer {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.footer-fixed {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #92278f; /* พื้นหลังสีม่วง */
+  padding: 10px 0;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+  z-index: 999;
+}
+
+.footer-text {
+  text-align: center;
+  color: #ffffff; /* ตัวหนังสือสีขาว */
+  font-size: 0.9rem;
+  font-family: 'Prompt', sans-serif;
+  font-weight: 500;
+}
+
+.menu-card {
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.menu-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 18px rgba(0,0,0,0.15);
+}
+
+.menu-icon {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+
+.menu-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #000;
+}
+
+.disabled-card {
+  background-color: #f0f0f0 !important;
+  box-shadow: none !important;
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.card-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  font-size: 0.75rem;
+}
+.card-badge-container {
+  position: relative;
+}
+
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+<!-- ✅ Banner -->
+<div class="box-style">
+  <img src="https://img5.pic.in.th/file/secure-sv1/Banner73a0113a3f327406.png" class="banner-img" alt="Banner">
+</div>
+
+<!-- ✅ ข้อความ + ปุ่ม toggle อยู่ในแถวเดียวกัน -->
+<div class="d-flex justify-content-between align-items-center mt-4 mb-4 flex-wrap gap-2">
+  <h6 class="dashboard-title mb-0">
+    Dashboard ติดตาม KPI กฟส.บ้านไผ่ (รวม กฟฟ.ในสังกัด)
+  </h6>
+  <button id="toggleViewBtn" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-layout-three-columns"></i> เปลี่ยนรูปแบบเมนู
+  </button>
+</div>
+
+
+    <!-- ✅ ใช้ row สำหรับ Grid -->
+<div class="row" id="menuContainer"></div>
+
+
+    <!-- ✅ ข้อความล่างสุด -->
+<h6 class="dashboard-footer text-purple text-center mt-4 mb-4">
+  ข้อมูลในเดชบอร์ดใช้เทคโนโลยี RPA อัพเดทข้อมูลอัตโนมัติ
+</h6>
+
+  </div>
+
+<!-- ✅ Sticky Footer -->
+<footer class="footer-fixed">
+  <div class="footer-text">
+    จัดทำโดย แผนกก่อสร้างระบบไฟฟ้า การไฟฟ้าส่วนภูมิภาคสาขาบ้านไผ่
+  </div>
+</footer>
+
+
+  <script>
+ let currentView = 'vertical'; // เริ่มต้นแบบแนวตั้ง
+
+const badgeColorMap = {}; // เก็บ mapping คำ → สี
+const badgeColors = [
+  'bg-primary', 'bg-success', 'bg-warning',
+  'bg-danger', 'bg-info', 'bg-secondary'
+];
+
+function getBadgeColorClass(badgeText) {
+  if (!badgeText) return '';
+  if (!badgeColorMap[badgeText]) {
+    // สุ่มสีจากรายการที่มี
+    const randomColor = badgeColors[Object.keys(badgeColorMap).length % badgeColors.length];
+    badgeColorMap[badgeText] = randomColor;
+  }
+  return badgeColorMap[badgeText];
+}
+
+
+function createCard(item) {
+  const isDisabled = item.status !== true;
+  const badgeColorClass = getBadgeColorClass(item.badge);
+  const badgeHtml = item.badge
+    ? `<span class="badge ${badgeColorClass} card-badge">${item.badge}</span>`
+    : '';
+
+  if (currentView === 'vertical') {
+    return `
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card-badge-container">
+          ${badgeHtml}
+          ${isDisabled
+            ? `
+              <div class="menu-card disabled-card d-block text-center p-4">
+                <img src="${item.icon}" alt="icon" class="menu-icon mb-3">
+                <div class="menu-text">${item.menu}</div>
+              </div>`
+            : `
+              <a href="${item.link}" target="_blank" class="menu-card d-block text-center p-4">
+                <img src="${item.icon}" alt="icon" class="menu-icon mb-3">
+                <div class="menu-text">${item.menu}</div>
+              </a>`
+          }
+        </div>
+      </div>
+    `;
+  } else {
+    return `
+      <div class="col-12 mb-3">
+        <div class="card-badge-container">
+          ${badgeHtml}
+          ${isDisabled
+            ? `
+              <div class="box-style disabled-card">
+                <div class="card-custom">
+                  <img src="${item.icon}" alt="icon" class="icon-img">
+                  <div class="menu-text">${item.menu}</div>
+                </div>
+              </div>`
+            : `
+              <div class="box-style">
+                <a href="${item.link}" target="_blank" class="card-custom">
+                  <img src="${item.icon}" alt="icon" class="icon-img">
+                  <div class="menu-text">${item.menu}</div>
+                </a>
+              </div>`
+          }
+        </div>
+      </div>
+    `;
+  }
+}
+
+
+
+  function renderMenu(data) {
+    const container = document.getElementById('menuContainer');
+    container.innerHTML = "";
+    data.forEach(item => {
+      container.innerHTML += createCard(item);
+    });
+  }
+
+  // โหลดข้อมูลครั้งแรก
+  let menuData = [];
+  google.script.run.withSuccessHandler(function(data) {
+    menuData = data;
+    renderMenu(menuData);
+  }).getMenuData();
+
+  // Toggle รูปแบบ
+document.getElementById("toggleViewBtn").addEventListener("click", function () {
+  currentView = currentView === 'vertical' ? 'horizontal' : 'vertical';
+  renderMenu(menuData);
+
+  const icon = this.querySelector('i');
+  icon.className = currentView === 'vertical' ? 'bi bi-layout-three-columns' : 'bi bi-list-ul';
+});
+
+</script>
+</body>
+</html>
